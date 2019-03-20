@@ -183,6 +183,14 @@ public final class MCP23017 {
         }
         toggle_Rly(rly);
     }
+    
+    public void setPort(int value){
+        try {
+            GPIO.write(GPIOA_REG, (byte) value);
+        } catch (IOException ex) {
+            Logger.getLogger(MCP23017.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * Gets Inputs
      * @return

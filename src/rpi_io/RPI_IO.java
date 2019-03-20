@@ -94,7 +94,11 @@ public class RPI_IO {
         data = gpio.getInputs();
         return data;
     }
-
+    
+    public void setPort(int value){
+       gpio.setPort(value);
+    }
+    
     public boolean getInput(int input){
         boolean data=false;
         data=gpio.getInput(input);
