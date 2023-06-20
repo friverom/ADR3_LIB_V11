@@ -21,7 +21,8 @@ public final class MCP23017 {
     
     //Control Register IOCON
     private static final int IOCON_REG = 0x05;
-    private static final int IOCON = 0xa0; //Segregated banks non sequential
+    private static final int IOCON = 0xa4; //Segregated banks non sequential
+    //and interrupt out is Open Collector
     
     //Port A Registers. Port A is all Outputs
     private static final int IODIRA_REG = 0x00; 
@@ -35,6 +36,7 @@ public final class MCP23017 {
     private static final int DEFVALB = 0x13;
     private static final int INTCONB_REG = 0x14;
     private static final int INTFB_REG = 0x17;
+    private static final int INTCAP_REG = 0x18;
     private static final int GPIOB_REG = 0x19;
     private static final int OLATB_REG = 0x1a;
     
@@ -54,14 +56,47 @@ public final class MCP23017 {
             System.out.println("Connection to MCP23017. OK");
             GPIO.write(IOCON_REG, (byte)IOCON); //Segregated banks non seq.
             GPIO.write(IODIRA_REG, (byte) 0x00); //Port A all outputs
-            GPIO.write(OLATA_REG, (byte) 0xff);
+            GPIO.write(OLATA_REG, (byte) 0x00);
             GPIO.write(GPIOA_REG, (byte) 0x00);
+            GPIO.write(GPINTENB_REG, (byte) 0xff); //Enable interrupt on Port B
+            GPIO.write(DEFVALB, (byte)0x00); 
+            GPIO.write(INTCONB_REG, (byte) 0x00);
             GPIO.write(IPOLB_REG, (byte) 0xff); //Inverted Polarity
         } catch (IOException ex) {
             System.out.println("Error accessing MCP23017");
             Logger.getLogger(MCP23017.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    /**
+     * Return the Interrupt Flag Register. a one indicates the source of interrupt
+     * @return int Interrupt Register Flag
+     */
+    public synchronized int getIntFlag(){
+        int data=0;
+        
+        try{
+            data=GPIO.read(INTFB_REG);
+        }catch(IOException ex){
+            System.out.println("MCP23017 Error. Can't read Interrupt Flag Register");
+            Logger.getLogger(MCP23017.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return data;
+    }
+    
+    /**
+     * Return the input capture register at the instant of the interrupt
+     * @return int. Input port at interrupt moment
+     */
+    public synchronized int getIntCaptureReg(){
+        int data=0;
+        try{
+            data=GPIO.read(INTCAP_REG);
+        }catch(IOException ex){
+            System.out.println("MCP23017 Error. Can't read Interrupt Capture Register");
+            Logger.getLogger(MCP23017.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return data;
     }
     /**
      * Turns On all relays
