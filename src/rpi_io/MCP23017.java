@@ -56,12 +56,14 @@ public final class MCP23017 {
             System.out.println("Connection to MCP23017. OK");
             GPIO.write(IOCON_REG, (byte)IOCON); //Segregated banks non seq.
             GPIO.write(IODIRA_REG, (byte) 0x00); //Port A all outputs
-            GPIO.write(OLATA_REG, (byte) 0x00);
+            GPIO.write(OLATA_REG, (byte) 0xff);
             GPIO.write(GPIOA_REG, (byte) 0x00);
-            GPIO.write(GPINTENB_REG, (byte) 0xff); //Enable interrupt on Port B
+            GPIO.write(IODIRB_REG, (byte) 0xff);
+            GPIO.write(IPOLB_REG, (byte) 0xff); //Inverted Polarity
             GPIO.write(DEFVALB, (byte)0x00); 
             GPIO.write(INTCONB_REG, (byte) 0x00);
-            GPIO.write(IPOLB_REG, (byte) 0xff); //Inverted Polarity
+            GPIO.write(GPINTENB_REG, (byte) 0xff); //Enable interrupt on Port B
+            GPIO.read(INTFB_REG); //Discard any interrupt on startup
         } catch (IOException ex) {
             System.out.println("Error accessing MCP23017");
             Logger.getLogger(MCP23017.class.getName()).log(Level.SEVERE, null, ex);
