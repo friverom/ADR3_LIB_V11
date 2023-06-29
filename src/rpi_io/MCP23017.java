@@ -197,7 +197,7 @@ public final class MCP23017 {
     public void pulseON_Rly(int rly, int time){
         setON_Rly(rly);
         try {
-            Thread.sleep(time * 100);
+            Thread.sleep(time * 1);
         } catch (InterruptedException ex) {
             System.out.println("MCP23017 Error. Can't pulse relay output");
             Logger.getLogger(MCP23017.class.getName()).log(Level.SEVERE, null, ex);
