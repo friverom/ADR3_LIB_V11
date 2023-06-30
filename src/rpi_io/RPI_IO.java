@@ -128,48 +128,48 @@ public class RPI_IO {
                 }
                 break;
             
-            case 3:
-                if(rutine==3){
+            case 4:
+                if(rutine==4){
                     int_task.in_3_high();
                 }else{
                     int_task.in_3_low();
                 }
                 break;
             
-            case 4:
-                if(rutine==4){
+            case 8:
+                if(rutine==8){
                     int_task.in_4_high();
                 }else{
                     int_task.in_4_low();
                 }
                 break;    
                 
-            case 5:
-                if(rutine==5){
+            case 16:
+                if(rutine==16){
                     int_task.in_5_high();
                 }else{
                     int_task.in_5_low();
                 }
                 break;
                 
-            case 6:
-                if(rutine==6){
+            case 32:
+                if(rutine==32){
                     int_task.in_6_high();
                 }else{
                     int_task.in_6_low();
                 }
                 break;
                 
-            case 7:
-                if(rutine==7){
+            case 64:
+                if(rutine==64){
                     int_task.in_7_high();
                 }else{
                     int_task.in_7_low();
                 }
                 break;
                 
-            case 8:
-                if(rutine==8){
+            case 128:
+                if(rutine==128){
                     int_task.in_8_high();
                 }else{
                     int_task.in_8_low();
