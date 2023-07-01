@@ -10,6 +10,7 @@ package rpi_points;
  *
  * @author Federico
  */
-public class AnalogIinputExt {
+public enum AnalogInputWarning {
+    OK, LOW, HIGH;
 
 }
