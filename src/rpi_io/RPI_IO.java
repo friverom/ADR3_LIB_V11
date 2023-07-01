@@ -7,6 +7,7 @@ import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import static com.pi4j.io.gpio.PinState.LOW;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -34,7 +35,15 @@ public class RPI_IO {
     private GpioController rpio = null;
     private GpioPinDigitalInput interrupt = null; //GPIO_05 will listen to the 
     //interrupt from MCP 23017
-    private DigitalInputTask int_task = null; //This is a callback class that
+    private ArrayList<ArrayList<DigitalInputTask>> Listeners= null; //This is a callback class that
+    private ArrayList<DigitalInputTask> in1=null;
+    private ArrayList<DigitalInputTask> in2=null;
+    private ArrayList<DigitalInputTask> in3=null;
+    private ArrayList<DigitalInputTask> in4=null;
+    private ArrayList<DigitalInputTask> in5=null;
+    private ArrayList<DigitalInputTask> in6=null;
+    private ArrayList<DigitalInputTask> in7=null;
+    private ArrayList<DigitalInputTask> in8=null;
     //has methods to run interrupts on status of digital inputs
     
     public RPI_IO() {
@@ -58,6 +67,10 @@ public class RPI_IO {
             interrupt.setShutdownOptions(true);
             
             //Discard any interrupt on start up
+            Listeners=new ArrayList<ArrayList<DigitalInputTask>>();
+            for(int i=0;i<8;i++){
+                Listeners.add(new ArrayList<>());
+            }
             gpio.getIntFlag();
             gpio.getIntCaptureReg();
             
@@ -82,9 +95,11 @@ public class RPI_IO {
      * for each digital input on interrupt
      * @DigitalInputTask 
      */
-    public void addIntListener(DigitalInputTask t){
+    public void addIntListener(int input, DigitalInputTask t){
+            
+            Listeners.get(input).add(t);
         
-        this.int_task=t;
+        
     // create and register gpio pin listener
         interrupt.addListener(new GpioPinListenerDigital() {
             @Override
@@ -104,80 +119,46 @@ public class RPI_IO {
 
         });
     }
-    //This method process the interrupt. Determines which input generated the
-    //interrupt, if going high or low on the input and calls the corresponding
-    //rutine.
-    private void process_interrupt(int int_flag, int port_value){
-        //int_flag has the source of interrupt. 
-        int rutine=int_flag&port_value; //if 1, input went high
-                
-        switch(int_flag){
+    
+    private void process_interrupt(int flag, int register){
+        int in=getDigitalInputNumber(flag);
+        
+        for(DigitalInputTask t:Listeners.get(in)){
+            
+            t.call_interrupt_task(flag,register);
+        }
+        
+    }
+    
+    private int getDigitalInputNumber(int flag){
+        
+        switch(flag){
             case 1:
-                if(rutine==1){
-                    int_task.in_1_high();
-                }else{
-                    int_task.in_1_low();
-                }
-                break;
-            
+                return 1;
+                
             case 2:
-                if(rutine==2){
-                    int_task.in_2_high();
-                }else{
-                    int_task.in_2_low();
-                }
-                break;
-            
+                return 2;
+                
             case 4:
-                if(rutine==4){
-                    int_task.in_3_high();
-                }else{
-                    int_task.in_3_low();
-                }
-                break;
-            
+                return 3;
+                
             case 8:
-                if(rutine==8){
-                    int_task.in_4_high();
-                }else{
-                    int_task.in_4_low();
-                }
-                break;    
+                return 4;
                 
             case 16:
-                if(rutine==16){
-                    int_task.in_5_high();
-                }else{
-                    int_task.in_5_low();
-                }
-                break;
+                return 5;
                 
             case 32:
-                if(rutine==32){
-                    int_task.in_6_high();
-                }else{
-                    int_task.in_6_low();
-                }
-                break;
+                return 6;
                 
             case 64:
-                if(rutine==64){
-                    int_task.in_7_high();
-                }else{
-                    int_task.in_7_low();
-                }
-                break;
+                return 7;
                 
             case 128:
-                if(rutine==128){
-                    int_task.in_8_high();
-                }else{
-                    int_task.in_8_low();
-                }
-                break;
-                
+                return 8;
+               
             default:
-                
+                return 0;
         }
     }
     

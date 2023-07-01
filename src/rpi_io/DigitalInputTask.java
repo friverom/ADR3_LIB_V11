@@ -12,28 +12,6 @@ package rpi_io;
  */
 public interface DigitalInputTask {
     
-    public void in_1_high();
-    public void in_1_low();
-    
-    public void in_2_high();
-    public void in_2_low();
-    
-    public void in_3_high();
-    public void in_3_low();
-    
-    public void in_4_high();
-    public void in_4_low();
-    
-    public void in_5_high();
-    public void in_5_low();
-    
-    public void in_6_high();
-    public void in_6_low();
-    
-    public void in_7_high();
-    public void in_7_low();
-    
-    public void in_8_high();
-    public void in_8_low();
+    public void call_interrupt_task(int flag, int capture);
 
 }
