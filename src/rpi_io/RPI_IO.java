@@ -66,11 +66,15 @@ public class RPI_IO {
             // set shutdown state for this input pin
             interrupt.setShutdownOptions(true);
             
-            //Discard any interrupt on start up
+            //Create an ArrayList of Arraylist to save the listeners to all
+            //8 digital inputs. This array holds the callback routines to handle
+            //The interrupts of each digital input
+           
             Listeners=new ArrayList<ArrayList<DigitalInputTask>>();
-            for(int i=0;i<8;i++){
+            for(int i=0;i<9;i++){
                 Listeners.add(new ArrayList<>());
             }
+            //Discard any interrupt on start up
             gpio.getIntFlag();
             gpio.getIntCaptureReg();
             
@@ -96,7 +100,7 @@ public class RPI_IO {
      * @DigitalInputTask 
      */
     public void addIntListener(int input, DigitalInputTask t){
-            
+            //Add the listener to its corresponding ArrayList
             Listeners.get(input).add(t);
         
         
@@ -119,21 +123,23 @@ public class RPI_IO {
 
         });
     }
-    
+    // Determine which digital input has generated the interrupt
     private void process_interrupt(int flag, int register){
-        int in=getDigitalInputNumber(flag);
+        int in=getDigitalInputNumber(flag); //Digital input that generates the interrupt
         int input=0;
         
+        //Digital Input status at the interrupt moment
         if((flag & register) > 0){
             input=1;
         }
+        //Loop through the Digital input arraylist to run the callback routines
         for(DigitalInputTask t:Listeners.get(in)){
-            
             t.call_interrupt_task(input);
         }
         
     }
     
+    //Get the digital input that generates the interrupt
     private int getDigitalInputNumber(int flag){
         
         switch(flag){

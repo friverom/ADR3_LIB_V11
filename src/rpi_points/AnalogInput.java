@@ -5,13 +5,13 @@ import rpi_io.RPI_IO;
 
 
 /**
- *
+ * Implements an Analog data point
  * @author Federico
  */
 public class AnalogInput {
     
-    private final int analog_input_num;
-    private final AnalogInputType type;
+    private final int analog_input_num; //Channel number
+    private final AnalogInputType type; //Type of sensing transmitter
     //Variables of sensing range
     private final double sensor_min;
     private final double sensor_max;
@@ -25,6 +25,14 @@ public class AnalogInput {
     
     private RPI_IO rpio;
     
+    /**
+     * Analog Input Constructor.
+     * @param int num, Analog Channel 1..8
+     * @param AnalogInputType type, 0..20mA, 4..20mA, 0..5V, 0..10V
+     * @param double min, Sensor minimum sensing value
+     * @param double max, Sensor maximum sensing value
+     * @RPI_IO rpio, Board implementation
+     */
     public AnalogInput(int num, AnalogInputType type, double min, double max, RPI_IO rpio){
         this.analog_input_num=num;
         this.type=type;
@@ -35,6 +43,7 @@ public class AnalogInput {
         adjust_input();
     }
     
+    //Compute conversion values depending on type of transmitter
     private void adjust_input(){
         switch(this.type){
             case TYPE_4_20mA:
@@ -73,6 +82,10 @@ public class AnalogInput {
         }
     }
     
+    /**
+     * Returns a double value with reading adjusted to sensing range
+     * @return double Reading
+     */
     public double analog_read(){
         //Get analog reading and convert to sensor type
         int read=this.rpio.getChannel(this.analog_input_num);
