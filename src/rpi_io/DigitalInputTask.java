@@ -8,6 +8,6 @@ package rpi_io;
  */
 public interface DigitalInputTask {
     
-    public void call_interrupt_task(int flag, int capture);
+    public void call_interrupt_task(int input);
 
 }

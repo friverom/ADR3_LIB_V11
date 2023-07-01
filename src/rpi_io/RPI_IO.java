@@ -122,10 +122,14 @@ public class RPI_IO {
     
     private void process_interrupt(int flag, int register){
         int in=getDigitalInputNumber(flag);
+        int input=0;
         
+        if((flag & register) > 0){
+            input=1;
+        }
         for(DigitalInputTask t:Listeners.get(in)){
             
-            t.call_interrupt_task(flag,register);
+            t.call_interrupt_task(input);
         }
         
     }
