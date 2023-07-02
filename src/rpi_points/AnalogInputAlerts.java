@@ -10,7 +10,6 @@ package rpi_points;
  *
  * @author Federico
  */
-public enum AnalogInputWarning {
-    OK, LOW, HIGH;
-
+public enum AnalogInputAlerts {
+    OK, LOW_WARNING, HIGH_WARNING, LOW_ALARM, HIGH_ALARM;
 }

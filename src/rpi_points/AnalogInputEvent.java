@@ -10,6 +10,8 @@ package rpi_points;
  *
  * @author Federico
  */
-public enum AnalogInputAlarms {
-    OK, LOW, HIGH;
+public interface AnalogInputEvent {
+    
+    public void call_analogInput_event(double value, AnalogInputAlerts e);
+
 }
