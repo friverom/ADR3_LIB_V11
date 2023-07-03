@@ -36,14 +36,7 @@ public class RPI_IO {
     private GpioPinDigitalInput interrupt = null; //GPIO_05 will listen to the 
     //interrupt from MCP 23017
     private ArrayList<ArrayList<DigitalInputTask>> Listeners= null; //This is a callback class that
-    private ArrayList<DigitalInputTask> in1=null;
-    private ArrayList<DigitalInputTask> in2=null;
-    private ArrayList<DigitalInputTask> in3=null;
-    private ArrayList<DigitalInputTask> in4=null;
-    private ArrayList<DigitalInputTask> in5=null;
-    private ArrayList<DigitalInputTask> in6=null;
-    private ArrayList<DigitalInputTask> in7=null;
-    private ArrayList<DigitalInputTask> in8=null;
+ 
     //has methods to run interrupts on status of digital inputs
     
     public RPI_IO() {
