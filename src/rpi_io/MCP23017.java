@@ -47,7 +47,7 @@ public final class MCP23017 {
      * Constructor class. Initialize MCP23017 PORTA as output and PORTB
      * as Input with inverted polarity.
      * @param i2c
-     * @throws IOException 
+     *  
      */
     public MCP23017(I2CBus i2c) {
         try {
@@ -231,7 +231,7 @@ public final class MCP23017 {
     /**
      * Gets Inputs
      * @return
-     * @throws IOException 
+     *  
      */
     public synchronized int getInputs(){
         

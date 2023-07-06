@@ -90,7 +90,7 @@ public class RPI_IO {
      * This method implements a listener for MCP23017 interrupt signal.
      * It takes a DigitalInputTask class that provide methods to callback routines
      * for each digital input on interrupt
-     * @DigitalInputTask 
+     *  
      */
     public void addIntListener(int input, DigitalInputTask t){
             //Add the listener to its corresponding ArrayList
@@ -191,7 +191,7 @@ public class RPI_IO {
 
     /**
      * Turns ON specified relay output
-     * @param Relay output. 1..8
+     * @param int Relay output. 1..8
      */
     public void setRly(int r) {
         gpio.setON_Rly(r);
@@ -199,7 +199,7 @@ public class RPI_IO {
 
     /**
      * Turns OFF specified relay output
-     * @param Relay output. 1..8
+     * @param r int Relay output. 1..8
      */
     public void resetRly(int r) {
         gpio.setOFF_Rly(r);
@@ -207,7 +207,7 @@ public class RPI_IO {
 
     /**
      * Toggles the output of the specified relay
-     * @param Relay output. 1..8
+     * @param r int Relay output. 1..8
      */
     public void toggleRly(int r) {
         gpio.toggle_Rly(r);
@@ -215,8 +215,8 @@ public class RPI_IO {
 
     /**
      * Turns ON the specified relay for the specified time
-     * @param Relay output. 1..8
-     * @param Time in milliseconds
+     * @param r int Relay output. 1..8
+     * @param t int Time in milliseconds
      */
     public void pulseRly(int r, int t) {
         gpio.pulseON_Rly(r, t);
@@ -224,8 +224,8 @@ public class RPI_IO {
 
     /**
      * Toggles the relay for the specified time
-     * @param Relay output. 1..8
-     * @param time in milliseconds
+     * @param r int Relay output. 1..8
+     * @param t int time in milliseconds
      */
     public void pulseToggle(int r, int time) {
         gpio.pulseToggle(r, time);

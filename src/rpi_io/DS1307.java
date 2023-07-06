@@ -57,7 +57,7 @@ public final class DS1307 {
         }
     }
     /**
-     * 
+     * Get time
      * @return String with current time in format hh:mm:ss
      * 
      */
@@ -78,8 +78,8 @@ public final class DS1307 {
     }
    
     /**
-     * 
-     * @return RTC date in Calendar format
+     * Return RTC date 
+     * @return Calendar date format
      */
    public Calendar getCalendarRTC(){
    
@@ -138,8 +138,8 @@ public final class DS1307 {
    }
     
     /**
-     * 
-     * @return Date in mm/dd/yyyy format
+     * Return RTC date
+     * @return String Date in "mm/dd/yyyy" format
      * 
      */
     public synchronized String getDate(){
@@ -158,8 +158,8 @@ public final class DS1307 {
         return data;
     }
     /**
-     * 
-     * @param date dd/mm/yy format
+     * Set RTC date
+     * @param date String "dd/mm/yy" format
      * 
      */
     public synchronized void setDate(String date){
@@ -182,7 +182,7 @@ public final class DS1307 {
     }
     
     /**
-     * 
+     * Set RTC time 
      * @param time hh:mm:ss format
      *
      */
@@ -208,9 +208,9 @@ public final class DS1307 {
         }
     }
     /**
-     * 
-     * @param secs int < 60
-     * @throws IOException 
+     * Set seconds
+     * @param secs int 0..59
+     * @throws IOException Error setting seconds on RTC
      */
     private void setSeconds(int secs) throws IOException{
         
@@ -221,9 +221,9 @@ public final class DS1307 {
     } 
     
     /**
-     * 
-     * @param min int < 60
-     * @throws IOException 
+     * Set minute
+     * @param min int 0..59
+     * @throws IOException Error settings minutes on RTC
      */
     private void setMinutes(int min) throws IOException{
         
@@ -232,9 +232,9 @@ public final class DS1307 {
         }
     }
     /**
-     * 
-     * @param hour int < 24
-     * @throws IOException 
+     * Set hour
+     * @param hour int 0..23
+     * @throws IOException Error setting Hours on RTC
      */
     private void setHour(int hour) throws IOException{
     
@@ -243,9 +243,9 @@ public final class DS1307 {
         }
     }
     /**
-     * 
+     * Set day of week
      * @param day int between 1-7
-     * @throws IOException 
+     * @throws IOException Error setting day on RTC
      */
     private void setDay(int day) throws IOException {
         
@@ -254,9 +254,9 @@ public final class DS1307 {
         }
     }
     /**
-     * 
-     * @param date int < 32
-     * @throws IOException 
+     * Set day of month
+     * @param date int 1..31
+     * @throws IOException Error setting date on RTC
      */
     private void setDate(int date) throws IOException{
         
@@ -265,9 +265,9 @@ public final class DS1307 {
         }
     }
     /**
-     * 
+     * Set month
      * @param month int < 13
-     * @throws IOException 
+     * @throws IOException Error setting month on RTC
      */
     private void setMonth(int month) throws IOException{
     
@@ -276,7 +276,9 @@ public final class DS1307 {
             rtc.write(MONTH_REG, (byte)month);
         }
     }
-    
+    /**
+     * 
+     */
     private void setYear(int year) throws IOException{
     
         rtc.write(YEAR_REG,(byte)year);
@@ -321,21 +323,21 @@ public final class DS1307 {
     
     /**
      * Turns On OUT pin 1Hz
-     * @throws IOException 
+     * @throws IOException Cannot access Real Time Clock
      */
     public void blink() throws IOException{
         rtc.write(CONTROL_REG,(byte)OUT_1HZ);
     }
     /**
      * Turns Off OUT pin
-     * @throws IOException 
+     * @throws IOException Cannot access Real Time Clock
      */
     public void out_off() throws IOException{
         rtc.write(CONTROL_REG,(byte)OUT_OFF);
     }
     /**
      * Turns On OUT pin
-     * @throws IOException 
+     * @throws IOException Cannot access Real Time Clock
      */
     public void out_on() throws IOException{
         rtc.write(CONTROL_REG,(byte)OUT_ON);
@@ -349,7 +351,7 @@ public final class DS1307 {
      * Write a byte at addr
      * @param addr
      * @param data
-     * @throws IOException 
+     * @throws IOException Cannot write to DS1307 RTC memory
      */
     public void writeByte(int addr, byte data) throws IOException{
         //Check if address within range 0x08-0x3F

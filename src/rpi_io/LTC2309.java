@@ -36,7 +36,7 @@ public final class LTC2309 {
     /**
      * Constructor class
      * @param i2c
-     * @throws IOException 
+     *  
      */
     public LTC2309(I2CBus i2c) {
         this.i2c = i2c;
