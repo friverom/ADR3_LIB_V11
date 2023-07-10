@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package rpi_io;
 
 import com.pi4j.io.i2c.I2CBus;
@@ -348,9 +344,9 @@ public final class DS1307 {
     //methods to read and write to DS1307 memory
     
     /**
-     * Write a byte at addr
-     * @param addr
-     * @param data
+     * Write a byte at addr memory of DS1307
+     * @param addr Memory address 0x08..0x3F
+     * @param data Byte to be saved
      * @throws IOException Cannot write to DS1307 RTC memory
      */
     public void writeByte(int addr, byte data) throws IOException{
