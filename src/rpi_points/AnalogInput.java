@@ -27,11 +27,11 @@ public class AnalogInput {
     
     /**
      * Analog Input Constructor.
-     * @param int num, Analog Channel 1..8
-     * @param AnalogInputType type, 0..20mA, 4..20mA, 0..5V, 0..10V
-     * @param double min, Sensor minimum sensing value
-     * @param double max, Sensor maximum sensing value
-     * @RPI_IO rpio, Board implementation
+     * @param num Analog Channel 1..8
+     * @param type AnalogInputType, 0..20mA, 4..20mA, 0..5V, 0..10V
+     * @param min double Sensor minimum sensing value
+     * @param max double Sensor maximum sensing value
+     * @param rpio RPI_IO Board implementation
      */
     public AnalogInput(int num, AnalogInputType type, double min, double max, RPI_IO rpio){
         this.analog_input_num=num;

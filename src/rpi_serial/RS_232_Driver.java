@@ -54,6 +54,8 @@ public class RS_232_Driver extends SerialImpl{
     
     /**
      * Add a Callback routine for handle received serial data
+     * SerialDataEventListener interface implementation
+     * @param e SerialDataEventListener interface implementation
      */
     public void addListener(SerialDataEventListener e){
         
@@ -62,7 +64,7 @@ public class RS_232_Driver extends SerialImpl{
     /**
      * Transmit a String on the serial channel. The method waits until all
      * data has been transmitted.
-     * @param String data. Data String to be transmitted.
+     * @param  data  Data String to be transmitted.
      */
     public void send(String data) {
         pos.print(data);
@@ -70,8 +72,8 @@ public class RS_232_Driver extends SerialImpl{
         }
     
     /**
-     * Transmit a byet buffer on the serial channel
-     * @param byte[]. Buffer to be transmitted
+     * Transmit a byte buffer on the serial channel
+     * @param data byte[]. Buffer to be transmitted
      */
     public void send(byte[] data){
         pos.print(data);
@@ -81,10 +83,17 @@ public class RS_232_Driver extends SerialImpl{
     
     /**
      * Returns a byte array with the receive data
-     * @return byte[]. Received data
+     * @return byte[] Received data
      */
-    public byte[] receive() throws IOException{
-        byte[] rx=serial.read();
+    public byte[] receive() {
+        
+        byte[] rx=null;
+        try{
+            rx=serial.read();
+        }catch(IOException ex){
+            System.out.println("Error reading Serial data buffer");
+            
+        }
         return rx;
     }
     
@@ -93,8 +102,13 @@ public class RS_232_Driver extends SerialImpl{
      * Clears the TX and RX buffers
      * 
      */
-    public void discardBuffer() throws IllegalStateException, IOException{
+    public void discardBuffer() {
+        
+        try{
         serial.discardInput();
         serial.discardData();
+        }catch(IOException ex){
+            System.out.println("Error discarding serial data");
+        }
     }
 }

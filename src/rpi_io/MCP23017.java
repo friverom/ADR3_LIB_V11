@@ -46,7 +46,7 @@ public final class MCP23017 {
     /**
      * Constructor class. Initialize MCP23017 PORTA as output and PORTB
      * as Input with inverted polarity.
-     * @param i2c
+     * @param i2c Instance of RPI Board
      *  
      */
     public MCP23017(I2CBus i2c) {
@@ -124,7 +124,7 @@ public final class MCP23017 {
     }
     /**
      * Gets Relays Status
-     * @return
+     * @return Int with Relay output status
      * 
      */
     public synchronized int getRLYS(){
@@ -230,7 +230,7 @@ public final class MCP23017 {
     }
     /**
      * Gets Inputs
-     * @return
+     * @return int with Digital Input Status
      *  
      */
     public synchronized int getInputs(){

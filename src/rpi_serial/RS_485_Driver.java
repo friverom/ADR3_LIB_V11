@@ -34,7 +34,7 @@ public class RS_485_Driver extends RS_232_Driver{
     /**
      * Transmit a String on the serial channel.The method waits until all data
      * has been tranmitted
-     * @param String data. Data String to be transmitted.
+     * @param data Data String to be transmitted.
      */
     public void send(String data) {
         
@@ -46,13 +46,13 @@ public class RS_485_Driver extends RS_232_Driver{
     /**
      * Returns a byte array of data receive
      */
-    public byte[] receive() throws IOException{
+    public byte[] receive(){
         return super.receive();
     }
     
     /**
      * Adds a Callback routine to handle serial receptions.
-     * @param SerialDataEventListener, Must implement this interface
+     * @param e SerialDataEventListener Must implement this interface
      */
     public void addListener(SerialDataEventListener e){
         super.addListener(e);
@@ -63,8 +63,13 @@ public class RS_485_Driver extends RS_232_Driver{
      * Clears the TX and RX buffers
      * 
      */
-    public void discardBuffer() throws IOException{
+    public void discardBuffer(){
+        
+        try{
         serial.discardInput();
         serial.discardData();
+        }catch(IOException ex){
+            System.out.println("Error discarding serial data");
+        }
     }
 }

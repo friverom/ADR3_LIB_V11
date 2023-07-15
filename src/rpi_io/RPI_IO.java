@@ -90,7 +90,8 @@ public class RPI_IO {
      * This method implements a listener for MCP23017 interrupt signal.
      * It takes a DigitalInputTask class that provide methods to callback routines
      * for each digital input on interrupt
-     *  
+     * @param input to be listened
+     *  @param t DigitalInputTask Interface implementation
      */
     public void addIntListener(int input, DigitalInputTask t){
             //Add the listener to its corresponding ArrayList
@@ -191,7 +192,7 @@ public class RPI_IO {
 
     /**
      * Turns ON specified relay output
-     * @param int Relay output. 1..8
+     * @param r int Relay output. 1..8
      */
     public void setRly(int r) {
         gpio.setON_Rly(r);
@@ -225,7 +226,7 @@ public class RPI_IO {
     /**
      * Toggles the relay for the specified time
      * @param r int Relay output. 1..8
-     * @param t int time in milliseconds
+     * @param time  int time in milliseconds
      */
     public void pulseToggle(int r, int time) {
         gpio.pulseToggle(r, time);
@@ -243,7 +244,7 @@ public class RPI_IO {
     
     /**
      * Sets the Relays output to the supplied value
-     * @param Port Value
+     * @param value Port Value
      */
     public void setPort(int value){
        gpio.setPort(value);
@@ -251,7 +252,7 @@ public class RPI_IO {
     
     /**
      * Returns the status of digital input supplied 
-     * @param Digital input. 1..8
+     * @param input Digital input. 1..8
      * @return boolean value
      */
     public boolean getInput(int input){
@@ -262,8 +263,8 @@ public class RPI_IO {
     
     /**
      * Returns the analog conversion of supplied channel 
-     * @param Channel number. 1..8
-     * @return Analog conversion. 0..4096
+     * @param c Channel number. 1..8
+     * @return int Analog conversion. 0..4096
      */
     public int getChannel(int c) {
         int data = 0;
@@ -293,7 +294,7 @@ public class RPI_IO {
 
     /**
      * Sets the rtc time
-     * @param String format hh:mm:ss
+     * @param s String format hh:mm:ss
      */
     public void setTime(String s) {
         rtc.setTime(s);
@@ -301,7 +302,7 @@ public class RPI_IO {
 
     /**
      * Sets rtc date
-     * @param String format dd/mm/yy
+     * @param s String format dd/mm/yy
      */
     public void setDate(String s) {
         rtc.setDate(s);
@@ -311,64 +312,58 @@ public class RPI_IO {
      * Enables rtc Led to blink every second
      */
     public void blink_1Hz() {
-        try {
+        
             rtc.blink();
-        } catch (IOException ex) {
-            Logger.getLogger(RPI_IO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     /**
      * Turns ON rtc led
      */
     public void out_on() {
-        try {
+        
             rtc.out_on();
-        } catch (IOException ex) {
-            Logger.getLogger(RPI_IO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     /**
      * Turns OFF rtc led
      */
     public void out_off() {
-        try {
+        
             rtc.out_off();
-        } catch (IOException ex) {
-            Logger.getLogger(RPI_IO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
     /**
      * Returns rtc control register. See DS1307 datasheet
+     * @return int Control Register value
      */
-    public int getControlReg() throws IOException{
+    public int getControlReg() {
+        
         return rtc.getControlReg();
-    }
+       
+        }
     
     /** Saves String into DS1307 memory
      * @param a starting address
      * @param s String
      */
     public void writeString(int a, String s) {
-        try {
+       
             rtc.writeString(a, s);
-        } catch (IOException ex) {
-            Logger.getLogger(RPI_IO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     /**
      * Retrieves STring from rtc memory
+     * @param a integer address of String 0x08..0x3F
      * @return String
      */
     public String readString(int a) {
         String data = null;
-        try {
+        
             data = rtc.readString(a);
-        } catch (IOException ex) {
-            Logger.getLogger(RPI_IO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         return data;
     }
 
@@ -378,26 +373,19 @@ public class RPI_IO {
      * @param i Integer value
      */
     public void writeInt(int a, int i) {
-        try {
+        
             rtc.writeInt(a, i);
-        } catch (IOException ex) {
-            Logger.getLogger(RPI_IO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }
 
     /**
      * Retrieves an Integer value from memory
-     * @param a address of integer
-     * @returns Integer value
+     * @param a address of integer 0x08..0x3F
+     * @return int value
      */
     public int readInt(int a) {
-        int data = 0;
-        try {
-            data = rtc.readInt(a);
-        } catch (IOException ex) {
-            Logger.getLogger(RPI_IO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return data;
+                
+        return rtc.readInt(a);
     }
 
     
@@ -407,6 +395,7 @@ public class RPI_IO {
 
     /**
      * Get the current Date in Calendar format
+     * @return Calendar date
      */
     public Calendar getCalendarRTC() {
         
@@ -431,7 +420,7 @@ public class RPI_IO {
     
     /**
      * Get status of flag
-     * @param int Flag 1..8
+     * @param flag int Flag 1..8
      * @return boolean value
      */
     public boolean getFlag(int flag){
@@ -445,7 +434,7 @@ public class RPI_IO {
     
     /**
      * Set the flag register to value
-     * @param Int value
+     * @param flags int value
      */
     public void setFlags(int flags){
         this.flags=flags;
@@ -476,7 +465,7 @@ public class RPI_IO {
     
     /**
      * Get individual setpoint to value
-     * @param double value
+     * @param setpoint double value
      * @return double value
      */
     public double getSetpoint(int setpoint) {
@@ -490,7 +479,7 @@ public class RPI_IO {
     /**
      * Sets individual setpoint 
      * @param setpoint 1..8
-     * @param double value
+     * @param value double
      */
     public void setSetpoint(int setpoint, double value){
         if(setpoint>0 && setpoint<9){

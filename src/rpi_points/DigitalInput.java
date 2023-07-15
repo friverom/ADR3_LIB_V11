@@ -15,8 +15,8 @@ public class DigitalInput {
    
     /**
      * Constructor
-     * @param int in, Digital Input number. 1..8
-     * @param RPI_IO rpio, Board instance
+     * @param in Digital Input number. 1..8
+     * @param rpio RPI_IO Board instance
      */
     public DigitalInput(int in, RPI_IO rpio){
         this.input=in;
@@ -26,7 +26,7 @@ public class DigitalInput {
     /**
      * Adds a Listener to digital input. RPI Board generates an interrupt on
      * input going HIGH and other interrupt when going LOW
-     * @param DigitalInputTask i, callback routine
+     * @param i DigitalInputTask callback routine
      */
     public void addListener(DigitalInputTask i){
         rpio.addIntListener(this.input, i);

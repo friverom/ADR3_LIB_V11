@@ -14,8 +14,8 @@ public class OutputRelay {
     
     /**
      * Constructor.
-     * @param int rly, Relay number 1..8
-     * @param RPI_IO rpio, board instance 
+     * @param rly Relay number 1..8
+     * @param rpio RPI_IO board instance 
      */
     public OutputRelay(int rly, RPI_IO rpio){
         this.relay=rly;
@@ -31,7 +31,7 @@ public class OutputRelay {
     
     /**
      * Set Relay ON for time provided
-     * @param int time, time in milliseconds
+     * @param time in milliseconds
      */
     public void set(int time){
         this.rpio.pulseRly(this.relay,time);
@@ -47,7 +47,7 @@ public class OutputRelay {
     
     /**
      * Toggles Relay for time provided
-     * @param int time, time in milliseconds
+     * @param time in milliseconds
      */
     public void toggle(int time){
         this.rpio.pulseToggle(this.relay,time);

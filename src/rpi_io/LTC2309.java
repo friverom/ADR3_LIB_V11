@@ -35,7 +35,7 @@ public final class LTC2309 {
     
     /**
      * Constructor class
-     * @param i2c
+     * @param i2c Instance of RPI Board
      *  
      */
     public LTC2309(I2CBus i2c) {

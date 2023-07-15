@@ -28,11 +28,11 @@ public class AnalogInputExt extends AnalogInput{
     
     /**
      * Class Constructor.
-     * @param int num, Analog Input channel. 1..8
-     * @param AnalogInputType type, input Sensing type. 0..20ma, 4..20ma, 0..5V, 0..10V
-     * @param double min. Sensor minimum reading
-     * @param double max. Sensor maximum reading
-     * @param RPI_IO rpio, Board instance
+     * @param num  Analog Input channel. 1..8
+     * @param type AnalogInputType, input Sensing type. 0..20ma, 4..20ma, 0..5V, 0..10V
+     * @param min Sensor minimum reading
+     * @param max Sensor maximum reading
+     * @param rpio RPI_IO Board instance
      */
     public AnalogInputExt(int num, AnalogInputType type, double min, double max, RPI_IO rpio){
         super(num, type, min, max,rpio);
@@ -46,7 +46,7 @@ public class AnalogInputExt extends AnalogInput{
     }
     /**
      * Add Listener method for Warning and alarm detection
-     * @param AnalogInputEvent e, Listener callback routine
+     * @param e AnalogInputEvent Listener callback routine
      */
     public void addListener(AnalogInputEvent e){
         Listeners.add(e);
@@ -59,8 +59,8 @@ public class AnalogInputExt extends AnalogInput{
     }
     /**
      * Set Warning limits and no hysteresis
-     * @param double low
-     * @param double high
+     * @param low warning limit
+     * @param high warning limit
      */
     public void setWarnings(double low, double high){
         this.low_warning=low;
@@ -68,9 +68,9 @@ public class AnalogInputExt extends AnalogInput{
     }
     /**
      * Set Warning limits and hysteresis value for changing state
-     * @param double low
-     * @param double high
-     * @param double hyst, hysteresis value
+     * @param low warning limit
+     * @param high warning limit
+     * @param hyst hysteresis value
      */
     public void setWarnings(double low, double high, double hyst){
         this.low_warning=low;
@@ -80,8 +80,8 @@ public class AnalogInputExt extends AnalogInput{
     
     /**
      * Set Alarm limits and no hysteresis
-     * @param double low
-     * @param double high
+     * @param low alarm limit
+     * @param high alarm limit
      */
     public void setAlarms(double low, double high){
         this.low_alarm=low;
@@ -90,9 +90,9 @@ public class AnalogInputExt extends AnalogInput{
     
     /**
      * Set Alarms limits and hysteresis value for changing states
-     * @param double low
-     * @param double high
-     * @param double hyst, hysteresis value
+     * @param low alarm limit
+     * @param high alarm limit
+     * @param hyst hysteresis value
      */
     public void setAlarms(double low, double high, double hyst){
         this.low_alarm=low;

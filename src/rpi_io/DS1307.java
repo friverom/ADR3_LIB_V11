@@ -61,20 +61,17 @@ public final class DS1307 {
         
         String data = null;
         
-        try {
+     
             String hour = String.format("%02x", getHour());
             String minutes = String.format("%02x", getMinutes());
             String seconds = String.format("%02x", getSeconds());
             data = hour+":"+minutes+":"+seconds;
-        } catch (IOException ex) {
-            System.out.println("DS1307 Error. Can't read time");
-            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         return data;
     }
    
     /**
-     * Return RTC date 
+     * Return RTC date in Calendar format
      * @return Calendar date format
      */
    public Calendar getCalendarRTC(){
@@ -82,8 +79,7 @@ public final class DS1307 {
        Calendar date=Calendar.getInstance();
        date.clear();
               
-        try {
-           
+        
             int year=Integer.parseInt(String.format("%02x", getYear()))+2000;
             int month=Integer.parseInt(String.format("%02x", getMonth()));
             int day=Integer.parseInt(String.format("%02x", getDate1()));
@@ -94,9 +90,7 @@ public final class DS1307 {
             date.set(year,month,day,hour,minutes,seconds);
             date.set(Calendar.ZONE_OFFSET, readInt(ZONE));
             
-            } catch (IOException ex) {
-            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
-        }
+           
         
         return date;
    }
@@ -106,7 +100,7 @@ public final class DS1307 {
     */  
    public void setCalendarRTC(Calendar date){
    
-        try {
+        
             String year=Integer.toString(date.get(Calendar.YEAR)-2000);
             String month=Integer.toString(date.get(Calendar.MONTH));
             String day=Integer.toString(date.get(Calendar.DAY_OF_MONTH));
@@ -127,14 +121,12 @@ public final class DS1307 {
             setHour(StringToBCD(hour));
             writeInt(ZONE,zone);
             
-        } catch (IOException ex) {
-            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
        
    }
     
     /**
-     * Return RTC date
+     * Return RTC date as String
      * @return String Date in "mm/dd/yyyy" format
      * 
      */
@@ -142,15 +134,12 @@ public final class DS1307 {
         
         String data = null;
         
-        try {
+       
             String day = String.format("%02x", getDate1());
             String month = String.format("%02x", getMonth());
             String year = String.format("%02x", getYear());
             data = month+"/"+day+"/"+year;
-        } catch (IOException ex) {
-            System.out.println("DS1307 Error. Can't read date");
-            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         return data;
     }
     /**
@@ -162,7 +151,7 @@ public final class DS1307 {
         String[] parts = date.split("/");
         
         if (parts.length == 3) {
-            try {
+            
                 String day = parts[0];
                 String month = parts[1];
                 String year = parts[2];
@@ -170,10 +159,7 @@ public final class DS1307 {
                 setDate(StringToBCD(day));
                 setMonth(StringToBCD(month)); 
                 setYear(StringToBCD(year));
-            } catch (IOException ex) {
-                System.out.println("DS1307 Error. Can't set date");
-                Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
         }
     }
     
@@ -183,7 +169,7 @@ public final class DS1307 {
      *
      */
     public synchronized void setTime(String time){
-        try {
+        
             String[] parts = time.split(":");
             String seconds = null;
             String hour = parts[0];
@@ -198,20 +184,22 @@ public final class DS1307 {
             setSeconds(StringToBCD(seconds));
             setMinutes(StringToBCD(minutes));
             setHour(StringToBCD(hour));
-        } catch (IOException ex) {
-            System.out.println("DS1307 Error. Can't set date");
-            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }
     /**
      * Set seconds
      * @param secs int 0..59
-     * @throws IOException Error setting seconds on RTC
+     * 
      */
-    private void setSeconds(int secs) throws IOException{
+    private void setSeconds(int secs) {
         
+        try{
         if(secs<96){
          rtc.write(SECONDS_REG, (byte)secs);   
+        }
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot set seconds");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     } 
@@ -219,127 +207,231 @@ public final class DS1307 {
     /**
      * Set minute
      * @param min int 0..59
-     * @throws IOException Error settings minutes on RTC
+     * 
      */
-    private void setMinutes(int min) throws IOException{
+    private void setMinutes(int min){
         
+        try{
         if(min<96){
             rtc.write(MINUTES_REG,(byte)min);
+        }
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot set minutes");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
      * Set hour
      * @param hour int 0..23
-     * @throws IOException Error setting Hours on RTC
+     * 
      */
-    private void setHour(int hour) throws IOException{
+    private void setHour(int hour){
     
+        try{
         if(hour<36){
             rtc.write(HOUR_REG,(byte)hour);
+        }
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot set hour");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
      * Set day of week
      * @param day int between 1-7
-     * @throws IOException Error setting day on RTC
+     * 
      */
-    private void setDay(int day) throws IOException {
+    private void setDay(int day) {
         
+        try{
         if(day<8){
             rtc.write(DAY_REG,(byte)day);
+        }
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot set days");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
      * Set day of month
      * @param date int 1..31
-     * @throws IOException Error setting date on RTC
+     * 
      */
-    private void setDate(int date) throws IOException{
+    private void setDate(int date){
         
+        try{
         if(date<50){
             rtc.write(DATE_REG,(byte)date);   
+        }
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot set date");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
      * Set month
      * @param month int < 13
-     * @throws IOException Error setting month on RTC
+     * 
      */
-    private void setMonth(int month) throws IOException{
-    
+    private void setMonth(int month) {
+        
+        try{
         if(month<19){
             month=month;
             rtc.write(MONTH_REG, (byte)month);
         }
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot set month");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     /**
-     * 
+     * Set Year
+     * @param year
      */
-    private void setYear(int year) throws IOException{
+    private void setYear(int year){
     
+        try{
         rtc.write(YEAR_REG,(byte)year);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot set year");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    private int getSeconds() throws IOException {
+    private int getSeconds() {
     
-        return( rtc.read(SECONDS_REG));
+        int sec=0;
+        try{
+            sec=rtc.read(SECONDS_REG);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot read seconds register");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sec;
     }
     
-    private int getMinutes() throws IOException{
+    private int getMinutes(){
     
-        return(rtc.read(MINUTES_REG));
+        int min=0;
+        try{
+            min=rtc.read(MINUTES_REG);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot read minutes register");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return min;
     }
     
-    private int getHour() throws IOException{
-    
-        return(rtc.read(HOUR_REG));
+    private int getHour(){
+        
+        int hour=0;
+        try{
+            hour=rtc.read(HOUR_REG);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot read hour register");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return hour;
     }
     
-    private int getDay() throws IOException{
+    private int getDay(){
     
-        return(rtc.read(DAY_REG));
+        int day=0;
+        try{
+            day=rtc.read(DAY_REG);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot read day register");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return day;
     }
     
-    private int getDate1() throws IOException{
+    private int getDate1(){
     
-        return(rtc.read(DATE_REG));
+        int date=0;
+        try{
+            date=rtc.read(DATE_REG);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot read date register");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return date;
     }
     
-    private int getMonth() throws IOException {
+    private int getMonth(){
     
-        return(rtc.read(MONTH_REG));
+        int mon=0;
+        try{
+            mon=rtc.read(MONTH_REG);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot read month register");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return mon;
     }
     
-    private int getYear() throws IOException {
+    private int getYear(){
     
-        return(rtc.read(YEAR_REG));
+        int year=0;
+        try{
+            year=rtc.read(YEAR_REG);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot read year register");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return year;
     }
     
     // Methods to handle DS1307 OUT pin
     
     /**
      * Turns On OUT pin 1Hz
-     * @throws IOException Cannot access Real Time Clock
+     * 
      */
-    public void blink() throws IOException{
-        rtc.write(CONTROL_REG,(byte)OUT_1HZ);
+    public void blink(){
+        
+        try{
+            rtc.write(CONTROL_REG,(byte)OUT_1HZ);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot turn on 1 sec LED");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     /**
      * Turns Off OUT pin
-     * @throws IOException Cannot access Real Time Clock
+     * 
      */
-    public void out_off() throws IOException{
-        rtc.write(CONTROL_REG,(byte)OUT_OFF);
+    public void out_off(){
+        try{
+            rtc.write(CONTROL_REG,(byte)OUT_OFF);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot turn off 1 sec LED");
+        }
     }
     /**
      * Turns On OUT pin
-     * @throws IOException Cannot access Real Time Clock
+     * 
      */
-    public void out_on() throws IOException{
-        rtc.write(CONTROL_REG,(byte)OUT_ON);
+    public void out_on(){
+        
+        try{
+            rtc.write(CONTROL_REG,(byte)OUT_ON);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot turn on 1 sec LED");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    public int getControlReg() throws IOException{
-        return (int) rtc.read(CONTROL_REG);
+    public int getControlReg(){
+        
+        int reg=0;
+        try{
+            reg=rtc.read(CONTROL_REG);
+        }catch(IOException ex){
+            System.out.println("DS1307 Error. Cannot read Control Register");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return reg;
     }
     //methods to read and write to DS1307 memory
     
@@ -347,63 +439,87 @@ public final class DS1307 {
      * Write a byte at addr memory of DS1307
      * @param addr Memory address 0x08..0x3F
      * @param data Byte to be saved
-     * @throws IOException Cannot write to DS1307 RTC memory
+     * 
      */
-    public void writeByte(int addr, byte data) throws IOException{
+    public void writeByte(int addr, byte data){
+        
+        try{
         //Check if address within range 0x08-0x3F
         if(addr<0x40 && addr>0x07){
             rtc.write(addr,data);
         }
+        }catch(IOException ex){
+            System.out.println("DS1307 Error writing to memory");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     /**
      * Writes an Int as 4 byte in addr
-     * @param addr
-     * @param data
-     * @throws IOException 
+     * @param addr Memory address
+     * @param data int to be saved
+     * 
      */
-    public void writeInt(int addr, int data) throws IOException{
+    public void writeInt(int addr, int data) {
+        
+        
         if(addr<0x40 && addr>0x07){
             byte[] bytes = intToBytes(data);
             for(int i=0;i<4;i++)
                 writeByte(addr++, bytes[i]);
         }
+       
     }
     /**
      * Returns byte from memory addr
-     * @param addr
-     * @return byte
-     * @throws IOException 
+     * @param addr memory address
+     * @return byte byte read
+     * 
      */
-    public byte readByte(int addr) throws IOException{
+    public byte readByte(int addr){
+        
+        byte data=0;
+        try{
         if(addr<0x40 && addr>0x07){
-            return((byte) rtc.read(addr));
-        } else 
-            return(0);
+            data=(byte)rtc.read(addr);
+        } 
+        }catch(IOException ex){
+            System.out.println("DS1307 Error reading memory");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return data;
     }
     /**
      * Returns int from memory addr
-     * @param addr
-     * @return
-     * @throws IOException 
+     * @param addr memory address
+     * @return integer
+     * 
      */
-    public int readInt(int addr) throws IOException {
+    public int readInt(int addr) {
+        
+        int data=0;
+        
+        try{
         if (addr < 0x40 && addr > 0x07) {
             byte[] bytes = new byte[]{0x00,0x00,0x00,0x00};
             for(int i=0;i<4;i++){
                 bytes[i]=(byte)rtc.read(addr++);
             }
-            return (ByteBuffer.wrap(bytes).getInt());
-        } else {
-            return (0);
+            data= ByteBuffer.wrap(bytes).getInt();
+        } 
+        }catch(IOException ex){
+            System.out.println("DS1307 Error reading memory");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return data;
     }
     /**
      * Writes a string to memory addr
-     * @param addr
-     * @param data
-     * @throws IOException 
+     * @param addr memory address
+     * @param data String
+     * 
      */
-    public void writeString(int addr,String data) throws IOException{
+    public void writeString(int addr,String data){
+        
         if(addr < 0x40 && addr > 0x07){
             byte[] bytes = new byte[data.length()];
             bytes = data.getBytes();
@@ -411,16 +527,19 @@ public final class DS1307 {
                 writeByte(addr++,bytes[i]);
             }
             writeByte(addr,(byte)0x00);
-            
         }
+       
     }
     /**
      * Reads a String from memory addr
-     * @param addr
-     * @return
-     * @throws IOException 
+     * @param addr memory address 0x08..0x3F
+     * @return String
+     *
      */
-    public String readString(int addr) throws IOException {
+    public String readString(int addr) {
+        
+        String str=null;
+        try{
         if (addr < 0x40 && addr > 0x07) {
             byte[] bytes = new byte[56];
             int i = 0;
@@ -429,10 +548,15 @@ public final class DS1307 {
                 bytes[i++] = data;
                 data = (byte) rtc.read(addr++);
             }
-            String s = new String(bytes,"UTF-8");
-            return (s);
-        } else
-            return(null);
+            str= new String(bytes,"UTF-8");
+            return (str);
+        } 
+        }catch(IOException ex){
+            System.out.println("DS1307 Error reading memory");
+            Logger.getLogger(DS1307.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return str;
     }
     
     private byte[] intToBytes(final int i) {
